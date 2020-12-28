@@ -95,7 +95,7 @@ export default class App extends React.Component {
     render() {
         const indexOfLastPost = this.state.currentUser * this.state.usersPerPage;
         const indexOfFirstPost = indexOfLastPost - this.state.usersPerPage;
-        const currentPosts = this.state.data.slice(indexOfFirstPost, indexOfLastPost);
+        const currentUsers = this.state.data.slice(indexOfFirstPost, indexOfLastPost);
 
 
         return (
@@ -117,7 +117,7 @@ export default class App extends React.Component {
                         type={this.state.type}
                         upOrDown={this.state.upOrDown}
                         sortState={this.state.sortState}
-                        data={currentPosts}
+                        data={currentUsers}
                         handleSubmit={this.handleSubmit.bind(this)}
                         sortUsers={this.sortUsers.bind(this)}
                         sortInput={this.sortInput.bind(this)}
