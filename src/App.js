@@ -1,27 +1,29 @@
 import React from "react"
-import Tables from "./Tables/Tables";
+import Table from "./Table/Table";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Loader from "./Loader/Loader";
+
+const URLSHORT = 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}'
+const URLLONG = 'http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}'
 
 export default class App extends React.Component {
 
     state = {
         data: [],
-        data2: [],
+        initialData: [],
         isLoaded: true,
         sortState: '',
         upOrDown: '',
         type: '',
-        url: 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}'
     }
 
     componentDidMount() {
 
-        fetch(this.state.url)
+        fetch(URLSHORT)
             .then(r => r.json())
             .then(data => this.setState({
                 data,
-                data2: data,
+                initialData: data,
                 isLoaded: false
             }))
     }
@@ -43,7 +45,7 @@ export default class App extends React.Component {
         this.setState({
             data: !this.state.sortState ? newData : newData.reverse(),
             sortState: !this.state.sortState,
-            upOrDown: !this.state.sortState ? 'up' : 'down',
+            upOrDown: !this.state.sortState ? '∧' : '∨',
             type: type
         })
     }
@@ -63,36 +65,31 @@ export default class App extends React.Component {
                 data: newData2
             })
             : this.setState({
-                data: this.state.data2
+                data: this.state.initialData
             })
+    }
+
+    fetchToUrl(url) {
+        this.setState({isLoaded: true})
+        fetch(url)
+            .then(r => r.json())
+            .then(data => this.setState({
+                data,
+                data2: data,
+                isLoaded: false
+            }))
     }
 
     render() {
         return (
             <>
             <div>
-                <button onClick={() => {
-                    this.setState({isLoaded: true})
-                    fetch('http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}')
-                    .then(r => r.json())
-                    .then(data => this.setState({
-                        data,
-                        data2: data,
-                        isLoaded: false
-                    }))}}>32 x человека</button>
-                <button onClick={() => {
-                    this.setState({isLoaded: true})
-                    fetch('http://www.filltext.com/?rows=1000&id=%7Bnumber%7C1000%7D&firstName=%7BfirstName%7D&delay=3&lastName=%7BlastName%7D&email=%7Bemail%7D&phone=%7Bphone%7C(xxx)xxx-xx-xx%7D&address=%7BaddressObject%7D&description=%7Blorem%7C32%7D')
-                    .then(r => r.json())
-                    .then(data => this.setState({
-                        data,
-                        data2: data,
-                        isLoaded: false
-                    }))}}>1000 человек</button>
+                <button type="button" className="btn btn-outline-info ml-1" onClick={() => this.fetchToUrl(URLSHORT)}>32 человека</button>
+                <button type="button" className="btn btn-outline-info m-1" onClick={() => this.fetchToUrl(URLLONG)}>1000 человек</button>
             </div>
                 {this.state.isLoaded
                     ? <Loader/>
-                    : <Tables
+                    : <Table
                         type={this.state.type}
                         upOrDown={this.state.upOrDown}
                         sortState={this.state.sortState}
@@ -102,7 +99,6 @@ export default class App extends React.Component {
                         sortInput={this.sortInput.bind(this)}
                     />
                 }
-
             </>
         )
     }

@@ -2,8 +2,9 @@ import React, {useState} from "react"
 import ModalAdd from "../ModalAdd/ModalAdd";
 import SelectedUser from "../SelectedUser/SelectedUser";
 import {Button, Form, FormControl, Nav, Navbar} from "react-bootstrap";
+import './/Table.css'
 
-function Tables ({data, handleSubmit, sortUsers, sortInput, upOrDown, type}) {
+function Table ({data, handleSubmit, sortUsers, sortInput, upOrDown, type}) {
 
     const [save, setSave] = useState(false)
     const [user, setUser] = useState({
@@ -70,18 +71,18 @@ function Tables ({data, handleSubmit, sortUsers, sortInput, upOrDown, type}) {
             />
             <table className="table table-hover">
                 <thead>
-                <tr>
-                    <th onClick={() => {sortUsers('id')}} scope="col">ID {type=== 'id' ? upOrDown : null} </th>
-                    <th onClick={() => sortUsers('firstName')} scope="col">FirstName {type=== 'firstName' ? upOrDown : null}</th>
-                    <th onClick={() => sortUsers('lastName')} scope="col">LastName {type=== 'lastName' ? upOrDown : null}</th>
-                    <th onClick={() => sortUsers('email')} scope="col">Email {type=== 'email' ? upOrDown : null}</th>
-                    <th onClick={() => sortUsers('phone')} scope="col">Phone {type=== 'phone' ? upOrDown : null}</th>
+                <tr className={'header_line'}>
+                    <th className={'column'} onClick={() => sortUsers('id')}>ID {type=== 'id' && upOrDown} </th>
+                    <th className={'column'} onClick={() => sortUsers('firstName')}>FirstName {type=== 'firstName' && upOrDown}</th>
+                    <th className={'column'} onClick={() => sortUsers('lastName')}>LastName {type=== 'lastName' && upOrDown}</th>
+                    <th className={'column'} onClick={() => sortUsers('email')}>Email {type=== 'email' && upOrDown}</th>
+                    <th className={'column'} onClick={() => sortUsers('phone')}>Phone {type=== 'phone' && upOrDown}</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody >
                 {data.map(item => (
                     <tr key={item.id + item.firstName} onClick={handleClick.bind(null, item)}>
-                        <th id={'id'} scope="row">{item.id}</th>
+                        <th id={'id'}>{item.id}</th>
                         <td id={'firstName'}>{item.firstName}</td>
                         <td id={'lastName'}>{item.lastName}</td>
                         <td id={'email'}>{item.email}</td>
@@ -103,4 +104,4 @@ function Tables ({data, handleSubmit, sortUsers, sortInput, upOrDown, type}) {
     )
 }
 
-export default Tables
+export default Table
