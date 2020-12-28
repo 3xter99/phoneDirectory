@@ -69,7 +69,7 @@ function Table ({data, handleSubmit, sortUsers, sortInput, upOrDown, type}) {
                 show={show}
                 handleClose={handleClose}
             />
-            <table className="table table-hover">
+            <table style={{marginBottom: '3rem'}} className="table table-hover">
                 <thead>
                 <tr className={'header_line'}>
                     <th className={'column'} onClick={() => sortUsers('id')}>ID {type=== 'id' && upOrDown} </th>

@@ -2,11 +2,16 @@ import React from "react"
 import Table from "./Table/Table";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import Loader from "./Loader/Loader";
+import Pagination from "./Poginator/Poginator";
 
 const URLSHORT = 'http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}'
 const URLLONG = 'http://www.filltext.com/?rows=1000&id={number|1000}&firstName={firstName}&delay=3&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}'
 
 export default class App extends React.Component {
+
+
+
+
 
     state = {
         data: [],
@@ -15,6 +20,9 @@ export default class App extends React.Component {
         sortState: '',
         upOrDown: '',
         type: '',
+        usersPerPage: 50,
+        currentUser: 1,
+
     }
 
     componentDidMount() {
@@ -80,7 +88,16 @@ export default class App extends React.Component {
             }))
     }
 
+    paginate = pageNumber => {
+        this.setState({currentUser:pageNumber})
+    }
+
     render() {
+        const indexOfLastPost = this.state.currentUser * this.state.usersPerPage;
+        const indexOfFirstPost = indexOfLastPost - this.state.usersPerPage;
+        const currentPosts = this.state.data.slice(indexOfFirstPost, indexOfLastPost);
+
+
         return (
             <>
             <div>
@@ -89,15 +106,24 @@ export default class App extends React.Component {
             </div>
                 {this.state.isLoaded
                     ? <Loader/>
-                    : <Table
+                    :
+                    <>
+                        <Pagination
+                            postsPerPage={this.state.usersPerPage}
+                            totalPosts={this.state.data.length}
+                            paginate={this.paginate.bind(this)}
+                        />
+                    <Table
                         type={this.state.type}
                         upOrDown={this.state.upOrDown}
                         sortState={this.state.sortState}
-                        data={this.state.data}
+                        data={currentPosts}
                         handleSubmit={this.handleSubmit.bind(this)}
                         sortUsers={this.sortUsers.bind(this)}
                         sortInput={this.sortInput.bind(this)}
                     />
+
+                    </>
                 }
             </>
         )
